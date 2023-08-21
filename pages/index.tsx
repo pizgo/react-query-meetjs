@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { QueryKeysRestaurantsEnum } from "models/query-keys-models";
 import type { NextPage } from "next";
+import { deleteRestaurantById } from "services/delete-restaurant-by-id";
 import { getRestaurants } from "services/get-restaurants";
 
 import styles from "../styles/Home.module.scss";
@@ -14,6 +15,9 @@ const Home: NextPage = () => {
     queryKey: [QueryKeysRestaurantsEnum.restautants],
     queryFn: getRestaurants,
   });
+
+  const { mutate: deleteRestaurantByIdMutate } =
+    useMutation(deleteRestaurantById);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -31,7 +35,12 @@ const Home: NextPage = () => {
             <li className={styles["main-list-item"]} key={restaurant.id}>
               <b>{restaurant.name}</b>
               {restaurant.address}
-              <button className={styles["delete-button"]}>Delete</button>
+              <button
+                onClick={() => deleteRestaurantByIdMutate(restaurant.id)}
+                className={styles["delete-button"]}
+              >
+                Delete
+              </button>
             </li>
           );
         })}
