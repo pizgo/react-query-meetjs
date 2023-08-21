@@ -2,21 +2,24 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { QueryKeysRestaurantsEnum } from "models/query-keys-models";
 import type { NextPage } from "next";
 import { deleteRestaurantById } from "services/delete-restaurant-by-id";
-import { getRestaurants } from "services/get-restaurants";
+
 import { toast } from "react-toastify";
 
 import styles from "../styles/Home.module.scss";
 import CreateRestaurant from "libs/create-restaurant";
+import { getRestaurantsPagination } from "services/get-restaurants-pagination";
+import { useState } from "react";
 
 const Home: NextPage = () => {
   const queryClient = useQueryClient();
+  const [page, setPage] = useState(1);
   const {
     data: restaurantsList,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: [QueryKeysRestaurantsEnum.restautants],
-    queryFn: getRestaurants,
+    queryKey: [QueryKeysRestaurantsEnum.restautants, page],
+    queryFn: () => getRestaurantsPagination(page, 2),
   });
 
   const { mutate: deleteRestaurantByIdMutate } = useMutation(
@@ -65,6 +68,15 @@ const Home: NextPage = () => {
           <p>No data</p>
         )}
       </ul>
+      <div>
+        <button
+          disabled={restaurantsList.currentPage <= 1}
+          onClick={() => setPage((prev) => prev - 1)}
+        >
+          Prev
+        </button>
+        <button onClick={() => setPage((prev) => prev + 1)}>Next</button>
+      </div>
     </section>
   );
 };
