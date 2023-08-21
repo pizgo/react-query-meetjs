@@ -9,8 +9,10 @@ import styles from "../styles/Home.module.scss";
 import CreateRestaurant from "libs/create-restaurant";
 import { getRestaurantsPagination } from "services/get-restaurants-pagination";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
   const {
@@ -37,6 +39,8 @@ const Home: NextPage = () => {
     }
   );
 
+  const redirectToDetails = () => {};
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -55,6 +59,12 @@ const Home: NextPage = () => {
               <li className={styles["main-list-item"]} key={restaurant.id}>
                 <b>{restaurant.name}</b>
                 {restaurant.address}
+                <button
+                  onClick={() => router.push(`edit/${restaurant.id}`)}
+                  className={styles["edit-button"]}
+                >
+                  Edit
+                </button>
                 <button
                   onClick={() => deleteRestaurantByIdMutate(restaurant.id)}
                   className={styles["delete-button"]}

@@ -14,3 +14,4 @@ export type GetRestaurantsResponse = {
 };
 
 export type CreateRestaurantRequest = { name: string; address: string };
+export type EditRestaurantRequest = { id?: number; name: string };
