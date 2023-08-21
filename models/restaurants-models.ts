@@ -12,3 +12,5 @@ export type GetRestaurantsResponse = {
   restaurants: Restaurant[];
   totalCount: number;
 };
+
+export type CreateRestaurantRequest = { name: string; address: string };

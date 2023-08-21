@@ -6,6 +6,7 @@ import { getRestaurants } from "services/get-restaurants";
 import { toast } from "react-toastify";
 
 import styles from "../styles/Home.module.scss";
+import CreateRestaurant from "libs/create-restaurant";
 
 const Home: NextPage = () => {
   const queryClient = useQueryClient();
@@ -43,6 +44,7 @@ const Home: NextPage = () => {
 
   return (
     <section className={styles.container}>
+      <CreateRestaurant />
       <ul className={styles["main-list"]}>
         {restaurantsList?.restaurants.length ? (
           restaurantsList?.restaurants.map((restaurant) => {
