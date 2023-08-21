@@ -5,5 +5,7 @@ export const deleteRestaurantById = async (id: number): Promise<any> => {
   try {
     const response = await axios.delete(`${baseApiUrl}/restaurants/${id}`);
     return response.data;
-  } catch {}
+  } catch (error) {
+    throw error;
+  }
 };
