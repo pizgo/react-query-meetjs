@@ -29,7 +29,9 @@ const Home: NextPage = () => {
         {restaurantsList?.restaurants.map((restaurant) => {
           return (
             <li className={styles["main-list-item"]} key={restaurant.id}>
-              <b>{restaurant.name}</b> - {restaurant.address}
+              <b>{restaurant.name}</b>
+              {restaurant.address}
+              <button className={styles["delete-button"]}>Delete</button>
             </li>
           );
         })}
