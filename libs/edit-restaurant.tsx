@@ -18,8 +18,8 @@ const EditRestaurant: NextPage = () => {
 
   console.log(itemId);
   const { data } = useQuery({
-    queryKey: ["single-restaurant", itemId],
-    queryFn: () => getRestaurantById(Number(itemId)),
+    queryKey: [QueryKeysRestaurantsEnum.singleRestaurant, Number(id)],
+    queryFn: async () => getRestaurantById(Number(itemId)),
     enabled: Boolean(Number(itemId)),
   });
 
@@ -35,7 +35,8 @@ const EditRestaurant: NextPage = () => {
   const { mutate: editRestaurantMutate, isLoading } = useMutation(
     editRestaurant,
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
+        console.log(data);
         toast.success("Restaurant successfully edited!");
         queryClient.invalidateQueries({
           queryKey: [QueryKeysRestaurantsEnum.restautants],

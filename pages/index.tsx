@@ -10,6 +10,7 @@ import CreateRestaurant from "libs/create-restaurant";
 import { getRestaurantsPagination } from "services/get-restaurants-pagination";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { getRestaurantById } from "services/get-restaurant-by-id";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -39,8 +40,6 @@ const Home: NextPage = () => {
     }
   );
 
-  const redirectToDetails = () => {};
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -49,6 +48,15 @@ const Home: NextPage = () => {
     return <div>Error</div>;
   }
 
+  const prefetchRestaurant = async (id: number) => {
+    // The results of this query will be cached like a normal query
+    await queryClient.prefetchQuery({
+      queryKey: [QueryKeysRestaurantsEnum.singleRestaurant, Number(id)],
+      queryFn: () => getRestaurantById(Number(id)),
+      staleTime: 2000,
+    });
+  };
+
   return (
     <section className={styles.container}>
       <CreateRestaurant />
@@ -56,7 +64,11 @@ const Home: NextPage = () => {
         {restaurantsList?.restaurants.length ? (
           restaurantsList?.restaurants.map((restaurant) => {
             return (
-              <li className={styles["main-list-item"]} key={restaurant.id}>
+              <li
+                onMouseEnter={() => prefetchRestaurant(restaurant.id)}
+                className={styles["main-list-item"]}
+                key={restaurant.id}
+              >
                 <b>{restaurant.name}</b>
                 {restaurant.address}
                 <button
